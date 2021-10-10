@@ -17,6 +17,12 @@
   - [Command: `rb`](#command-rb)
   - [Command: `du`](#command-du)
   - [Command: `cat`](#command-cat)
+  - [Command: `sql`](#command-sql)
+  - [Command: `head`](#command-head)
+  - [Command: `pipe`](#command-pipe)
+  - [Command: `cp`](#command-cp)
+  - [Command: `mv`](#command-mv)
+  - [Command `rm`](#command-rm)
 
 ## Overview
 
