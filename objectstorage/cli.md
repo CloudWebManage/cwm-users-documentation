@@ -23,7 +23,7 @@
   - [Command: `mv`](#command-mv)
   - [Command: `rm`](#command-rm)
   - [Command: `share`](#command-share)
-  - [Subcommand: `share download`](#subcommand-share-download)
+    - [Subcommand: `share download`](#subcommand-share-download)
     - [Subcommand: `share upload`](#subcommand-share-upload)
     - [Subcommand: `share list`](#subcommand-share-list)
   - [Command: `mirror`](#command-mirror)
@@ -882,7 +882,7 @@ FLAGS:
   --help, -h                    show help
 ```
 
-### Subcommand: `share download`
+#### Subcommand: `share download`
 
 `share download` command generates URLs to download objects without requiring
 access and secret keys. Expiry option sets the maximum validity period (no more
