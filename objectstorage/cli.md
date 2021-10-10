@@ -84,7 +84,7 @@ mc alias set <ALIAS> <API_ACCESS_URL> <ACCESS_KEY> <SECRET_KEY>
 Example:
 
 ```shell
-mc alias set cwm-minio "API_ACCESS_URL" "ACCESS_KEY" "SECRET_KEY"
+mc alias set cwm-minio https://123456789.eu.cloudwm-obj.com AAAABBBB CCCCDDDD
 ```
 
 After setting the alias for a CWM instance e.g. `cwm-minio`, you can
@@ -95,12 +95,6 @@ Example:
 ```shell
 mc ls cwm-minio
 ```
-
-For more details on installing and configuring the MinIO Client for your
-instance, please refer to:
-
-- [MinIO Client Quickstart Guide](https://github.com/minio/mc/blob/master/README.md)
-- [Add a Cloud Storage Service](https://github.com/minio/mc/blob/master/docs/minio-client-complete-guide.md#3-add-a-cloud-storage-service)
 
 ## Global Options
 
@@ -132,10 +126,6 @@ Example:
 ```shell
 mc --debug ls cwm-minio
 ```
-
-For more details, please refer to:
-
-- [Global Options](https://github.com/minio/mc/blob/master/docs/minio-client-complete-guide.md#6-global-options)
 
 ## Commands
 
@@ -173,14 +163,8 @@ tag         manage tags for bucket(s) and object(s)
 ilm         manage bucket lifecycle
 version     manage bucket versioning
 replicate   configure server side bucket replication
-admin       manage MinIO servers
 update      update mc to latest release
 ```
-
-### Command: `admin`
-
-For details on the `admin` command, please refer to its
-[complete guide](https://github.com/minio/mc/blob/master/docs/minio-admin-complete-guide.md).
 
 ### Command: `alias`
 
@@ -204,15 +188,8 @@ COMMANDS:
 
 Example: Manage Config File
 
-Add MinIO server access and secret keys to config file alias entry. Note that,
-the history feature of your shell may record these keys and pose a security
-risk. On `bash` shell, use `set -o` and `set +o` to disable and enable history
-feature momentarily.
-
 ```shell
-set +o history
-mc alias set cwm-minio <API_ACCESS_URL> <ACCESS_KEY> <SECRET_KEY>
-set -o history
+mc alias set cwm-minio https://123456789.eu.cloudwm-obj.com AAAABBBB CCCCDDDD
 ```
 
 Remove the alias from the config file:
@@ -229,8 +206,7 @@ mc alias list
 
 ### Command: `update`
 
-Check for updates from [https://dl.min.io](https://dl.min.io). Experimental flag
-checks for unstable experimental releases primarily meant for testing purposes.
+Check for updates from [https://dl.min.io](https://dl.min.io).
 
 ```shell
 $ mc update --help
@@ -514,9 +490,6 @@ FLAGS:
 
 ENVIRONMENT VARIABLES:
   MC_ENCRYPT_KEY: list of comma delimited prefix=secret values
-
-SERIALIZATION OPTIONS:
-  For query serialization options, refer to https://docs.min.io/docs/minio-client-complete-guide#sql
 ```
 
 Example: Select all columns on a set of objects recursively.
@@ -537,9 +510,6 @@ Example: Run an aggregation query on an encrypted object with customer provided 
 mc sql --encrypt-key "cwm-minio/iot-devices=32byteslongsecretkeymustbegiven1" \
     --query "select count(s.power) from S3Object" cwm-minio/iot-devices/power-ratio-encrypted.csv
 ```
-
-For more query examples refer to official AWS S3 documentation
-[here](https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html#RESTObjectSELECTContent-responses-examples).
 
 ### Command: `head`
 
