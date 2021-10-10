@@ -8,7 +8,6 @@
 - [Configure CWM MinIO Instance](#configure-cwm-minio-instance)
 - [Global Options](#global-options)
 - [Commands](#commands)
-  - [Command: `admin`](#command-admin)
   - [Command: `alias`](#command-alias)
   - [Command: `update`](#command-update)
   - [Command: `ls`](#command-ls)
@@ -22,7 +21,12 @@
   - [Command: `pipe`](#command-pipe)
   - [Command: `cp`](#command-cp)
   - [Command: `mv`](#command-mv)
-  - [Command `rm`](#command-rm)
+  - [Command: `rm`](#command-rm)
+  - [Command: `share`](#command-share)
+  - [Subcommand: `share download`](#subcommand-share-download)
+    - [Subcommand: `share upload`](#subcommand-share-upload)
+    - [Subcommand: `share list`](#subcommand-share-list)
+  - [Command: `mirror`](#command-mirror)
 
 ## Overview
 
@@ -32,8 +36,8 @@ commands such as `ls`, `cat`, `cp`, `mirror`, `diff`, `find`, etc.
 
 ## Install
 
-According to your OS and architecture, download and install the relevant [MinIO
-Client](https://github.com/minio/mc/blob/master/README.md).
+According to your OS and architecture, download and install the relevant MinIO
+Client.
 
 ### macOS
 
@@ -759,28 +763,43 @@ Example: Move a server-side encrypted file to an object storage.
 mc mv --recursive --encrypt-key "s3/documents/=<SECRET_KEY_1>, cwm-minio/documents/=<SECRET_KEY_2>" s3/documents/test.txt cwm-minio/documents/
 ```
 
-### Command `rm`
+### Command: `rm`
 
-Use `rm` command to remove file or object
+Use `rm` command to remove file or object.
 
 ```shell
-$ mc rb --help
+$ mc rm --help
 NAME:
-  mc rb - remove a bucket
+  mc rm - remove objects
 
 USAGE:
-  mc rb [FLAGS] TARGET [TARGET...]
+  mc rm [FLAGS] TARGET [TARGET ...]
 
 FLAGS:
-  --force                       force a recursive remove operation on all object versions
-  --dangerous                   allow site-wide removal of objects
-  --config-dir value, -C value  path to configuration folder (default: "/home/cwm/.mc")
-  --quiet, -q                   disable progress bar display
-  --no-color                    disable color theme
-  --json                        enable JSON lines formatted output
-  --debug                       enable debug output
-  --insecure                    disable SSL certificate verification
-  --help, -h                    show help
+  --versions                       remove object(s) and all its versions
+  --non-current                    remove object(s) versions that are non current (with top-level delete marker)
+  --rewind value                   roll back object(s) to current version at specified time
+  --version-id value, --vid value  delete a specific version of an object
+  --recursive, -r                  remove recursively
+  --force                          allow a recursive remove operation
+  --dangerous                      allow site-wide removal of objects
+  --incomplete, -I                 remove incomplete uploads
+  --fake                           perform a fake remove operation
+  --stdin                          read object names from STDIN
+  --older-than value               remove objects older than L days, M hours and N minutes
+  --newer-than value               remove objects newer than L days, M hours and N minutes
+  --bypass                         bypass governance
+  --encrypt-key value              encrypt/decrypt objects (using server-side encryption with customer provided keys)
+  --config-dir value, -C value     path to configuration folder (default: "/home/cwm/.mc")
+  --quiet, -q                      disable progress bar display
+  --no-color                       disable color theme
+  --json                           enable JSON lines formatted output
+  --debug                          enable debug output
+  --insecure                       disable SSL certificate verification
+  --help, -h                       show help
+
+ENVIRONMENT VARIABLES:
+  MC_ENCRYPT_KEY: list of comma delimited prefix=secret values
 ```
 
 Example: Remove a single object.
@@ -814,4 +833,188 @@ nothing is printed out.
 
 ```shell
 mc rm -r --force --older-than 1d2h30m cwm-minio/bucket1
+```
+
+### Command: `share`
+
+`share` command securely grants upload or download access to object storage.
+This access is only temporary and it is safe to share with remote users and
+applications. If you want to grant permanent access, you may look at `mc policy`
+command instead.
+
+Generated URL has access credentials encoded in it. Any attempt to tamper the
+URL will invalidate the access. To understand how this mechanism works, please
+follow [Pre-Signed URL](http://docs.aws.amazon.com/AmazonS3/latest/dev/ShareObjectPreSignedURL.html)
+technique.
+
+```shell
+$ mc share --help
+NAME:
+  mc share - generate URL for temporary access to an object
+
+USAGE:
+  mc share COMMAND [COMMAND FLAGS | -h] [ARGUMENTS...]
+
+COMMANDS:
+  download  generate URLs for download access
+  upload    generate `curl` command to upload objects without requiring access/secret keys
+  list      list previously shared objects
+
+FLAGS:
+  --config-dir value, -C value  path to configuration folder (default: "/home/cwm/.mc")
+  --quiet, -q                   disable progress bar display
+  --no-color                    disable color theme
+  --json                        enable JSON lines formatted output
+  --debug                       enable debug output
+  --insecure                    disable SSL certificate verification
+  --help, -h                    show help
+```
+
+### Subcommand: `share download`
+
+`share download` command generates URLs to download objects without requiring
+access and secret keys. Expiry option sets the maximum validity period (no more
+than 7 days), beyond which the access is revoked automatically.
+
+```shell
+$ mc share download --help
+NAME:
+  mc share download - generate URLs for download access
+
+USAGE:
+  mc share download [FLAGS] TARGET [TARGET...]
+
+FLAGS:
+  --recursive, -r                  share all objects recursively
+  --version-id value, --vid value  share a particular object version
+  --expire value, -E value         set expiry in NN[h|m|s] (default: "168h")
+  --config-dir value, -C value     path to configuration folder (default: "/home/cwm/.mc")
+  --quiet, -q                      disable progress bar display
+  --no-color                       disable color theme
+  --json                           enable JSON lines formatted output
+  --debug                          enable debug output
+  --insecure                       disable SSL certificate verification
+  --help, -h                       show help
+```
+
+Example: Grant temporary access to an object with 4 hours expiry limit.
+
+```shell
+mc share download --expire 4h cwm-minio/bucket1/test.txt
+```
+
+Example: Share a particular version of an object.
+
+```shell
+mc share download --version-id <VERSION_ID> cwm-minio/bucket1/test.txt
+```
+
+#### Subcommand: `share upload`
+
+`share upload` command generates a `curl` command to upload objects without
+requiring access/secret keys. Expiry option sets the maximum validity period (no
+more than 7 days), beyond which the access is revoked automatically.
+`Content-Type` option restricts uploads to only certain type of files.
+
+```shell
+$ mc share upload --help
+NAME:
+  mc share upload - generate `curl` command to upload objects without requiring access/secret keys
+
+USAGE:
+  mc share upload [FLAGS] TARGET [TARGET...]
+
+FLAGS:
+  --recursive, -r                 recursively upload any object matching the prefix
+  --expire value, -E value        set expiry in NN[h|m|s] (default: "168h")
+  --content-type value, -T value  specify a content-type to allow
+  --config-dir value, -C value    path to configuration folder (default: "/home/cwm/.mc")
+  --quiet, -q                     disable progress bar display
+  --no-color                      disable color theme
+  --json                          enable JSON lines formatted output
+  --debug                         enable debug output
+  --insecure                      disable SSL certificate verification
+  --help, -h                      show help
+```
+
+Example: Generate a `curl` command to enable upload access to
+`cwm-minio/bucket1/test.txt`. User replaces `<FILE>` with the actual filename to
+upload.
+
+```shell
+mc share upload cwm-minio/bucket1/test.txt
+```
+
+#### Subcommand: `share list`
+
+`share list` command lists unexpired URLs that were previously shared.
+
+```shell
+$ mc share list --help
+NAME:
+  mc share list COMMAND - list previously shared objects
+
+USAGE:
+  mc share list COMMAND
+
+COMMAND:
+  upload:   list previously shared access to uploads.
+  download: list previously shared access to downloads.
+```
+
+### Command: `mirror`
+
+`mirror` command synchronizes data between filesystems and object storages,
+similarly to `rsync`.
+
+```shell
+mc mirror --help
+NAME:
+  mc mirror - synchronize object(s) to a remote site
+
+USAGE:
+  mc mirror [FLAGS] SOURCE TARGET
+
+FLAGS:
+  --overwrite                        overwrite object(s) on target if it differs from source
+  --fake                             perform a fake mirror operation
+  --watch, -w                        watch and synchronize changes
+  --remove                           remove extraneous object(s) on target
+  --region value                     specify region when creating new bucket(s) on target (default: "us-east-1")
+  --preserve, -a                     preserve file(s)/object(s) attributes and bucket(s) policy/locking configuration(s) on target bucket(s)
+  --md5                              force all upload(s) to calculate md5sum checksum
+  --active-active                    enable active-active multi-site setup
+  --disable-multipart                disable multipart upload feature
+  --exclude value                    exclude object(s) that match specified object name pattern
+  --older-than value                 filter object(s) older than L days, M hours and N minutes
+  --newer-than value                 filter object(s) newer than L days, M hours and N minutes
+  --storage-class value, --sc value  specify storage class for new object(s) on target
+  --encrypt value                    encrypt/decrypt objects (using server-side encryption with server managed keys)
+  --attr value                       add custom metadata for all objects
+  --monitoring-address value         if specified, a new prometheus endpoint will be created to report mirroring activity. (eg: localhost:8081)
+  --encrypt-key value                encrypt/decrypt objects (using server-side encryption with customer provided keys)
+  --config-dir value, -C value       path to configuration folder (default: "/home/cwm/.mc")
+  --quiet, -q                        disable progress bar display
+  --no-color                         disable color theme
+  --json                             enable JSON lines formatted output
+  --debug                            enable debug output
+  --insecure                         disable SSL certificate verification
+  --help, -h                         show help
+
+ENVIRONMENT VARIABLES:
+   MC_ENCRYPT:      list of comma delimited prefixes
+   MC_ENCRYPT_KEY:  list of comma delimited prefix=secret values
+```
+
+Example: Mirror a local directory to `cwm-minio/bucket1`.
+
+```shell
+mc mirror ./data/ cwm-minio/bucket1
+```
+
+Example: Continuously watch for changes on a local directory and mirror the
+changes to `cwm-minio/bucket1`.
+
+```shell
+mc mirror -w ./data/ cwm-minio/bucket1
 ```
