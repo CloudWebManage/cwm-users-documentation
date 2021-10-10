@@ -35,6 +35,11 @@
   - [Command: `event`](#command-event)
   - [Command: `ilm`](#command-ilm)
   - [Command: `policy`](#command-policy)
+  - [Command: `tag`](#command-tag)
+  - [Command: `stat`](#command-stat)
+  - [Command: `version`](#command-version)
+  - [Command: `undo`](#command-undo)
+  - [Command: `encrypt`](#command-encrypt)
 
 ## Overview
 
@@ -143,7 +148,7 @@ mc --debug ls cwm-minio
 
 To list all the supported commands, run `mc --help`.
 
-Generally, the following commands are supported:
+For CWM MinIO instances, the following commands are supported:
 
 ```text
 alias       set, remove and list aliases in configuration file
@@ -174,7 +179,6 @@ policy      manage anonymous access to buckets and objects
 tag         manage tags for bucket(s) and object(s)
 ilm         manage bucket lifecycle
 version     manage bucket versioning
-replicate   configure server side bucket replication
 update      update mc to latest release
 ```
 
@@ -1303,7 +1307,7 @@ mc ilm rm --id "Documents" cwm-minio/bucket1/dev
 Manage anonymous bucket policies to a bucket and its contents.
 
 ```shell
-mc policy --help
+$ mc policy --help
 Name:
   mc policy - manage anonymous access to buckets and objects
 
@@ -1335,7 +1339,7 @@ Example: Show current anonymous bucket policy.
 
 Show current anonymous bucket policy for `bucket1/data/2020/` subdirectory.
 
-```sh
+```shell
 mc policy get cwm-minio/bucket1/data/2020/
 ```
 
@@ -1349,7 +1353,7 @@ accessible.
 mc policy set download cwm-minio/bucket1/data/2020/
 ```
 
-Example : Set anonymous bucket policy from a JSON file.
+Example: Set anonymous bucket policy from a JSON file.
 
 Configure bucket policy for `bucket1` with a policy JSON file.
 
@@ -1364,4 +1368,241 @@ Set anonymous bucket policy for `bucket1/data/2020/` subdirectory to
 
 ```shell
 mc policy set private cwm-minio/bucket1/data/2020/
+```
+
+### Command: `tag`
+
+`tag` command provides a convenient way to set, remove, and list bucket/object
+tags. Tags are defined as key-value pairs.
+
+```shell
+$ mc tag --help
+NAME:
+  mc tag - manage tags for bucket and object(s)
+
+USAGE:
+  mc tag COMMAND [COMMAND FLAGS | -h] [ARGUMENTS...]
+
+COMMANDS:
+  list    list tags of a bucket or an object
+  remove  remove tags assigned to a bucket or an object
+  set     set tags for a bucket and object(s)
+
+FLAGS:
+  --config-dir value, -C value  path to configuration folder (default: "/home/cwm/.mc")
+  --quiet, -q                   disable progress bar display
+  --no-color                    disable color theme
+  --json                        enable JSON lines formatted output
+  --debug                       enable debug output
+  --insecure                    disable SSL certificate verification
+  --help, -h                    show help
+```
+
+Example: List tags assigned to an object.
+
+```shell
+mc tag list cwm-minio/bucket1/test.txt
+```
+
+Example: Set tags for an object.
+
+```shell
+mc tag set cwm-minio/bucket1/test.txt "key1=value1&key2=value2&key3=value3"
+```
+
+Example: Remove tags assigned to an object.
+
+```shell
+mc tag remove cwm-minio/bucket1/test.txt
+```
+
+Example: Assign tags to a object versions older than one week.
+
+```shell
+mc tag set --versions --rewind 7d cwm-minio/bucket1/test.txt "status=old"
+```
+
+### Command: `stat`
+
+`stat` command displays information on objects (with optional prefix) contained
+in the specified bucket on an object storage. On a filesystem, it behaves like
+`stat` command.
+
+```shell
+$ mc stat --help
+NAME:
+  mc stat - show object metadata
+
+USAGE:
+  mc stat [FLAGS] TARGET [TARGET ...]
+
+FLAGS:
+  --rewind value                   stat on older version(s)
+  --versions                       stat all versions
+  --version-id value, --vid value  stat a specific object version
+  --recursive, -r                  stat all objects recursively
+  --encrypt-key value              encrypt/decrypt objects (using server-side encryption with customer provided keys)
+  --config-dir value, -C value     path to configuration folder (default: "/home/cwm/.mc")
+  --quiet, -q                      disable progress bar display
+  --no-color                       disable color theme
+  --json                           enable JSON lines formatted output
+  --debug                          enable debug output
+  --insecure                       disable SSL certificate verification
+  --help, -h                       show help
+
+ENVIRONMENT VARIABLES:
+  MC_ENCRYPT_KEY:  list of comma delimited prefix=secret values
+```
+
+Example: Display information on a bucket.
+
+```shell
+mc stat cwm-minio/bucket1
+```
+
+Example: Display information on an encrypted object.
+
+```shell
+mc stat cwm-minio/bucket1/test.txt --encrypt-key "cwm-minio/bucket1=<SECRET_KEY>"
+```
+
+Example: Display information on objects contained in the bucket.
+
+```shell
+mc stat -r cwm-minio/bucket1
+```
+
+Example: Stat a specific object version.
+
+```shell
+mc stat --version-id "<VERSION_ID>" cwm-minio/bucket1/test.txt
+```
+
+### Command: `version`
+
+`version` command manages bucket versioning.
+
+```shell
+$ mc version --help
+NAME:
+  mc version - manage bucket versioning
+
+USAGE:
+  mc version COMMAND [COMMAND FLAGS | -h] [ARGUMENTS...]
+
+COMMANDS:
+  enable   enable bucket versioning
+  suspend  suspend bucket versioning
+  info     show bucket versioning status
+
+FLAGS:
+  --config-dir value, -C value  path to configuration folder (default: "/home/cwm/.mc")
+  --quiet, -q                   disable progress bar display
+  --no-color                    disable color theme
+  --json                        enable JSON lines formatted output
+  --debug                       enable debug output
+  --insecure                    disable SSL certificate verification
+  --help, -h                    show help
+```
+
+Example: Enable versioning on a bucket.
+
+```shell
+mc version enable cwm-minio/bucket1
+```
+
+Example: Display the version configuration for a bucket.
+
+```shell
+mc version info cwm-minio/bucket1
+```
+
+Example: Suspend versioning for a bucket.
+
+```shell
+mc version suspend cwm-minio/bucket1
+```
+
+### Command: `undo`
+
+`undo` reverts the latest PUT/DELETE operations.
+
+```shell
+$ mc undo --help
+NAME:
+  mc undo - undo PUT/DELETE operations
+
+USAGE:
+  mc undo [FLAGS] SOURCE [SOURCE...]
+
+FLAGS:
+  --recursive, -r               undo last S3 put/delete operations
+  --force                       force recursive operation
+  --last value                  undo N last changes (default: 1)
+  --dry-run                     fake an undo operation
+  --config-dir value, -C value  path to configuration folder (default: "/home/cwm/.mc")
+  --quiet, -q                   disable progress bar display
+  --no-color                    disable color theme
+  --json                        enable JSON lines formatted output
+  --debug                       enable debug output
+  --insecure                    disable SSL certificate verification
+  --help, -h                    show help
+```
+
+Example: Undo the last 3 uploads and/or removals of a particular object.
+
+```shell
+mc undo cwm-minio/bucket1/test.txt --last 3
+```
+
+### Command: `encrypt`
+
+`encrypt` command manages the bucket's encryption.
+
+```shell
+$ mc encrypt --help
+NAME:
+  mc encrypt - manage bucket encryption config
+
+USAGE:
+  mc encrypt COMMAND [COMMAND FLAGS | -h] [ARGUMENTS...]
+
+COMMANDS:
+  set    set encryption config
+  clear  clear encryption config
+  info   show bucket encryption status
+
+FLAGS:
+  --config-dir value, -C value  path to configuration folder (default: "/home/cwm/.mc")
+  --quiet, -q                   disable progress bar display
+  --no-color                    disable color theme
+  --json                        enable JSON lines formatted output
+  --debug                       enable debug output
+  --insecure                    disable SSL certificate verification
+  --help, -h                    show help
+```
+
+Example: Display a bucket's encryption status.
+
+```shell
+mc encrypt info cwm-minio/bucket1
+```
+
+Example: Set SSE-S3 auto encryption for a bucket.
+
+```shell
+mc encrypt set sse-s3 cwm-minio/bucket1
+```
+
+Example: Set SSE-KMS auto encryption for a bucket with KMS Key Id
+`"arn:aws:kms:us-east-1:xxx:key/xxx"`.
+
+```shell
+mc encrypt set sse-kms "arn:aws:kms:us-east-1:xxx:key/xxx" cwm-minio/bucket1
+```
+
+Example: Clear auto encryption config for a bucket.
+
+```shell
+mc encrypt clear cwm-minio/bucket1
 ```
