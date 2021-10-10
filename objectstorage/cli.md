@@ -29,9 +29,12 @@
   - [Command: `mirror`](#command-mirror)
   - [Command: `find`](#command-find)
   - [Command: `diff`](#command-diff)
-    - [Option [--json]](#option---json)
+    - [Option `--json`](#option---json)
     - [Diff values in json output](#diff-values-in-json-output)
   - [Command: `watch`](#command-watch)
+  - [Command: `event`](#command-event)
+  - [Command: `ilm`](#command-ilm)
+  - [Command: `policy`](#command-policy)
 
 ## Overview
 
@@ -1132,7 +1135,7 @@ Example: Compare a local directory and a remote object storage.
 mc diff ./data cwm-minio/bucket1
 ```
 
-#### Option [--json]
+#### Option `--json`
 
 JSON option enables parsable output in [JSON lines](http://jsonlines.org/)
 format.
@@ -1182,4 +1185,183 @@ Example: Watch for all events on local directory.
 
 ```shell
 mc watch ./data
+```
+
+### Command: `event`
+
+`event` provides a convenient way to manage various types of event notifications
+on a bucket. MinIO event notification can be configured to use AMQP, Redis,
+ElasticSearch, NATS, and PostgreSQL services. MinIO configuration provides more
+details on how these services can be configured.
+
+```shell
+$ mc event --help
+NAME:
+  mc event - manage object notifications
+
+USAGE:
+  mc event COMMAND [COMMAND FLAGS | -h] [ARGUMENTS...]
+
+COMMANDS:
+  add     add a new bucket notification
+  remove  remove a bucket notification; '--force' removes all bucket notifications
+  list    list bucket notifications
+
+FLAGS:
+  --config-dir value, -C value  path to configuration folder (default: "/home/cwm/.mc")
+  --quiet, -q                   disable progress bar display
+  --no-color                    disable color theme
+  --json                        enable JSON lines formatted output
+  --debug                       enable debug output
+  --insecure                    disable SSL certificate verification
+  --help, -h                    show help
+```
+
+Example: List all configured bucket notifications.
+
+```shell
+mc event list cwm-minio/bucket1
+```
+
+Example: Add a new `sqs` notification resource only to notify on ObjectCreated
+event
+
+```shell
+mc event add cwm-minio/bucket1 arn:minio:sqs:us-east-1:1:your-queue --event put
+```
+
+Example: Add a new `sqs` notification resource with filters.
+
+Add `prefix` and `suffix` filtering rules for `sqs` notification resource.
+
+```shell
+mc event add cwm-minio/bucket1 arn:minio:sqs:us-east-1:1:your-queue --prefix photos/ --suffix .jpg
+```
+
+Example: Remove a `sqs` notification resource.
+
+```shell
+mc event remove cwm-minio/bucket1 arn:minio:sqs:us-east-1:1:your-queue
+```
+
+### Command: `ilm`
+
+`ilm` - A convenient way to manage bucket lifecycle configuration.
+
+```shell
+$ mc ilm --help
+NAME:
+  mc ilm - manage bucket lifecycle
+
+USAGE:
+  mc ilm COMMAND [COMMAND FLAGS | -h] [ARGUMENTS...]
+
+COMMANDS:
+  add      add a lifecycle configuration rule to existing (if any) rule(s) on a bucket
+  edit     modify a lifecycle configuration rule with given id
+  ls       lists lifecycle configuration rules set on a bucket
+  rm       remove (if any) existing lifecycle configuration rule
+  export   export lifecycle configuration in JSON format
+  import   import lifecycle configuration in JSON format
+  restore  restore archived objects
+
+FLAGS:
+  --config-dir value, -C value  path to configuration folder (default: "/home/cwm/.mc")
+  --quiet, -q                   disable progress bar display
+  --no-color                    disable color theme
+  --json                        enable JSON lines formatted output
+  --debug                       enable debug output
+  --insecure                    disable SSL certificate verification
+  --help, -h                    show help
+```
+
+Example: List the lifecycle management rules.
+
+```shell
+mc ilm ls cwm-minio/bucket1
+```
+
+For more details about the lifecycle configuration, refer to official AWS S3
+[documentation](https://docs.aws.amazon.com/AmazonS3/latest/dev/intro-lifecycle-rules.html).
+
+Example: Edit the lifecycle management configuration rule given by ID to set
+tags.
+
+```shell
+mc ilm edit --id "Documents" --tags "k1=v1&k2=v2" cwm-minio/bucket1/dev
+```
+
+Example: Remove the lifecycle management configuration rule given by ID
+`Documents`.
+
+```shell
+mc ilm rm --id "Documents" cwm-minio/bucket1/dev
+```
+
+### Command: `policy`
+
+Manage anonymous bucket policies to a bucket and its contents.
+
+```shell
+mc policy --help
+Name:
+  mc policy - manage anonymous access to buckets and objects
+
+USAGE:
+  mc policy [FLAGS] set PERMISSION TARGET
+  mc policy [FLAGS] set-json FILE TARGET
+  mc policy [FLAGS] get TARGET
+  mc policy [FLAGS] get-json TARGET
+  mc policy [FLAGS] list TARGET
+
+FLAGS:
+  --recursive, -r               list recursively
+  --config-dir value, -C value  path to configuration folder (default: "/home/cwm/.mc")
+  --quiet, -q                   disable progress bar display
+  --no-color                    disable color theme
+  --json                        enable JSON lines formatted output
+  --debug                       enable debug output
+  --insecure                    disable SSL certificate verification
+  --help, -h                    show help
+
+PERMISSION:
+  Allowed policies are: [none, download, upload, public].
+
+FILE:
+  A valid S3 policy JSON filepath.
+```
+
+Example: Show current anonymous bucket policy.
+
+Show current anonymous bucket policy for `bucket1/data/2020/` subdirectory.
+
+```sh
+mc policy get cwm-minio/bucket1/data/2020/
+```
+
+Example: Set anonymous bucket policy to download only.
+
+Set anonymous bucket policy for `bucket1/data/2020/` sub-directory and its
+objects to `download` only. The objects under the subdirectory will be publicly
+accessible.
+
+```shell
+mc policy set download cwm-minio/bucket1/data/2020/
+```
+
+Example : Set anonymous bucket policy from a JSON file.
+
+Configure bucket policy for `bucket1` with a policy JSON file.
+
+```shell
+mc policy set-json ./policy.json cwm-minio/bucket1
+```
+
+Example: Set current anonymous bucket policy to private.
+
+Set anonymous bucket policy for `bucket1/data/2020/` subdirectory to
+`private`. This is equivalent to removing any bucket policies.
+
+```shell
+mc policy set private cwm-minio/bucket1/data/2020/
 ```
