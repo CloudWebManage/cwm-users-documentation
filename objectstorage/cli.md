@@ -27,6 +27,11 @@
     - [Subcommand: `share upload`](#subcommand-share-upload)
     - [Subcommand: `share list`](#subcommand-share-list)
   - [Command: `mirror`](#command-mirror)
+  - [Command: `find`](#command-find)
+  - [Command: `diff`](#command-diff)
+    - [Option [--json]](#option---json)
+    - [Diff values in json output](#diff-values-in-json-output)
+  - [Command: `watch`](#command-watch)
 
 ## Overview
 
@@ -1017,4 +1022,164 @@ changes to `cwm-minio/bucket1`.
 
 ```shell
 mc mirror -w ./data/ cwm-minio/bucket1
+```
+
+### Command: `find`
+
+`find` command finds files which match the given set of parameters. It only
+lists the contents which match the given set of criteria.
+
+```shell
+mc find --help
+NAME:
+  mc find - search for objects
+
+USAGE:
+  mc find PATH [FLAGS]
+
+FLAGS:
+  --exec value                  spawn an external process for each matching object (see FORMAT)
+  --ignore value                exclude objects matching the wildcard pattern
+  --name value                  find object names matching wildcard pattern
+  --newer-than value            match all objects newer than L days, M hours and N minutes
+  --older-than value            match all objects older than L days, M hours and N minutes
+  --path value                  match directory names matching wildcard pattern
+  --print value                 print in custom format to STDOUT (see FORMAT)
+  --regex value                 match directory and object name with PCRE regex pattern
+  --larger value                match all objects larger than specified size in units (see UNITS)
+  --smaller value               match all objects smaller than specified size in units (see UNITS)
+  --maxdepth value              limit directory navigation to specified depth (default: 0)
+  --watch                       monitor a specified path for newly created object(s)
+  --config-dir value, -C value  path to configuration folder (default: "/home/cwm/.mc")
+  --quiet, -q                   disable progress bar display
+  --no-color                    disable color theme
+  --json                        enable JSON lines formatted output
+  --debug                       enable debug output
+  --insecure                    disable SSL certificate verification
+  --help, -h                    show help
+
+UNITS
+  --smaller, --larger flags accept human-readable case-insensitive number
+  suffixes such as "k", "m", "g" and "t" referring to the metric units KB,
+  MB, GB and TB respectively. Adding an "i" to these prefixes, uses the IEC
+  units, so that "gi" refers to "gibibyte" or "GiB". A "b" at the end is
+  also accepted. Without suffixes the unit is bytes.
+
+  --older-than, --newer-than flags accept the string for days, hours and minutes
+  i.e. 1d2h30m states 1 day, 2 hours and 30 minutes.
+
+FORMAT
+  Support string substitutions with special interpretations for following keywords.
+  Keywords supported if target is filesystem or object storage:
+
+     {}     --> Substitutes to full path.
+     {base} --> Substitutes to basename of path.
+     {dir}  --> Substitutes to dirname of the path.
+     {size} --> Substitutes to object size of the path.
+     {time} --> Substitutes to object modified time of the path.
+
+  Keywords supported if target is object storage:
+
+     {url} --> Substitutes to a shareable URL of the path.
+```
+
+Example: Find all JPEG images from S3 bucket and copy to MinIO "play/bucket"
+bucket continuously.
+
+```shell
+mc find s3/bucket --name "*.jpg" --watch --exec "mc cp {} cwm-minio/bucket1"
+```
+
+### Command: `diff`
+
+``diff`` command computes the differences between the two directories. It only
+lists the contents which are missing or which differ in size.
+
+It *DOES NOT* compare the contents, so it is possible that the objects which are
+of same name and of the same size, but have difference in contents are not
+detected. This way, it can perform high speed comparison on large volumes or
+between sites
+
+```shell
+$ mc diff --help
+NAME:
+  mc diff - list differences in object name, size, and date between two buckets
+
+USAGE:
+  mc diff [FLAGS] FIRST SECOND
+
+FLAGS:
+  --config-dir value, -C value  path to configuration folder (default: "/home/cwm/.mc")
+  --quiet, -q                   disable progress bar display
+  --no-color                    disable color theme
+  --json                        enable JSON lines formatted output
+  --debug                       enable debug output
+  --insecure                    disable SSL certificate verification
+  --help, -h                    show help
+
+DESCRIPTION:
+  Diff only calculates differences in object name, size and time. It *DOES NOT* compare objects' contents.
+
+LEGEND:
+  < - object is only in source.
+  > - object is only in destination.
+  ! - newer object is in source.
+```
+
+Example: Compare a local directory and a remote object storage.
+
+```shell
+mc diff ./data cwm-minio/bucket1
+```
+
+#### Option [--json]
+
+JSON option enables parsable output in [JSON lines](http://jsonlines.org/)
+format.
+
+Example: `diff` JSON output.
+
+```shell
+mc diff cmw-minio/bucket1 cwm-minio/bucket2 --json
+```
+
+#### Diff values in json output
+
+|       Constant        | Value |                 Meaning                 |
+| :-------------------: | :---: | :-------------------------------------: |
+|    differInUnknown    |   0   |   Could not perform diff due to error   |
+|     differInNone      |   1   |             Does not differ             |
+|     differInSize      |   2   |             Differs in size             |
+|   differInMetadata    |   3   |           Differs in metadata           |
+|     differInType      |   4   |    Differs in type exfile/directory     |
+|     differInFirst     |   5   |         Only in source (FIRST)          |
+|    differInSecond     |   6   |         Only in target (SECOND)         |
+| differInAASourceMTime |   7   | Differs in active-active source modtime |
+
+### Command: `watch`
+
+`watch` provides a convenient way to watch on various types of event
+notifications on object storage and filesystem.
+
+```shell
+USAGE:
+  mc watch [FLAGS] PATH
+FLAGS:
+  --events value                   filter specific types of events, defaults to all events (default: "put,delete,get")
+  --prefix value                   filter events for a prefix
+  --suffix value                   filter events for a suffix
+  --recursive                      recursively watch for events
+  --help, -h                       show help
+```
+
+Example: Watch for all events on object storage.
+
+```shell
+mc watch cwm-minio/bucket1
+```
+
+Example: Watch for all events on local directory.
+
+```shell
+mc watch ./data
 ```
