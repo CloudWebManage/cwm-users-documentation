@@ -1,4 +1,3 @@
-<!-- omit in toc -->
 # Object Storage Console
 
 - [Overview](#overview)
