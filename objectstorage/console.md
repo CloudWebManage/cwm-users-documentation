@@ -16,6 +16,7 @@
   - [Object Storage Console: How to navigate through Dashboard](#object-storage-console-how-to-navigate-through-dashboard)
   - [Object Storage Console: How to create a MinIO Instance](#object-storage-console-how-to-create-a-minio-instance)
   - [Object Storage Console: How to delete a MinIO Instance](#object-storage-console-how-to-delete-a-minio-instance)
+  - [Object Storage Console: How to configure a MinIO Instance](#object-storage-console-how-to-configure-a-minio-instance)
 - [MinIO Console: Features](#minio-console-features)
   - [MinIO Console: Buckets](#minio-console-buckets)
   - [MinIO Console: Objects](#minio-console-objects)
@@ -32,8 +33,7 @@
 
 The CWM Object Storage Console provides a a simple and easy-to-use WebUI to make
 use of CWM Object Storage offerings. With the help of this Console, a user can
-easily create, configure, and remove the MinIO instances according to the
-workload requirements.
+easily manage the MinIO instances according to the workload requirements.
 
 The following sections discuss all the available features of the Console (CWM
 Object Storage and MinIO instance) and how to use them effectively to make the
@@ -124,7 +124,7 @@ The Console provides the features to reset your password, enable/disable
 multi-factor authentication, configure your preferences, etc. You can navigate
 to your profile by clicking on the User Profile icon
 ![User Profile Icon](images/console/cwm-object-storage/user-profile-icon.png)
-in the right top corner.
+in the top-right corner.
 
 ## Object Storage Console: How-Tos
 
@@ -161,7 +161,9 @@ Demo:
 
 ### Object Storage Console: How to delete a MinIO Instance
 
-- Click on the **Actions** button on the instance you want to delete.
+- Click on the **Actions** button
+  ![Actions](images/console/cwm-object-storage/btn-actions.png) on the instance
+  you want to delete.
 - From the drop-down menu, select the **Terminate** menu option. A confirmation
   dialog box will appear.
 - Check on the **Check to allow Termination** checkbox.
@@ -170,6 +172,28 @@ Demo:
 Demo:
 
 ![Delete Instance Demo](images/console/cwm-object-storage/demo-delete-instance.gif)
+
+### Object Storage Console: How to configure a MinIO Instance
+
+- Click on the **Open** button
+  ![Open](images/console/cwm-object-storage/btn-open.png) of the MinIO instance
+  that you want to configure.
+- A new panel will appear on the right side showing all the properties and
+  configurations of the selected MinIO instance. The right expanded panel will
+  include the following tabs/sub-menus:
+
+  - INFO
+  - CONFIGURE
+  - CACHE
+  - REPORTS
+  - LOGS
+
+- The expanded right panel of an instance can be closed by clicking on the
+  **Close** button ![Close](images/console/cwm-object-storage/btn-close.png).
+
+Demo:
+
+![Configure Instance](images/console/cwm-object-storage/demo-configure-instance.gif)
 
 ---
 
