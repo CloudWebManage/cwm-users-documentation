@@ -1,3 +1,4 @@
+<!-- omit in toc -->
 # Object Storage Console
 
 - [Overview](#overview)
@@ -18,16 +19,8 @@
   - [Object Storage Console: How to delete a MinIO Instance](#object-storage-console-how-to-delete-a-minio-instance)
   - [Object Storage Console: How to configure a MinIO Instance](#object-storage-console-how-to-configure-a-minio-instance)
 - [MinIO Console: Features](#minio-console-features)
-  - [MinIO Console: Buckets](#minio-console-buckets)
-  - [MinIO Console: Objects](#minio-console-objects)
 - [MinIO Console: How-Tos](#minio-console-how-tos)
-  - [MinIO Console: How to log in](#minio-console-how-to-log-in)
-  - [MinIO Console: How to create a bucket](#minio-console-how-to-create-a-bucket)
-  - [MinIO Console: How to delete a bucket](#minio-console-how-to-delete-a-bucket)
-  - [MinIO Console: How to upload an object to a bucket](#minio-console-how-to-upload-an-object-to-a-bucket)
-  - [MinIO Console: How to download an object from a bucket](#minio-console-how-to-download-an-object-from-a-bucket)
-  - [MinIO Console: How to delete an object in a bucket](#minio-console-how-to-delete-an-object-in-a-bucket)
-  - [MinIO Console: How to share an object](#minio-console-how-to-share-an-object)
+  - [MinIO Console: How to log in via CWM MinIO Instance Credentials](#minio-console-how-to-log-in-via-cwm-minio-instance-credentials)
 
 ## Overview
 
@@ -197,30 +190,35 @@ Demo:
 
 ---
 
-The following sections explore the features and usage of the MinIO instance
+The following sections explore the features and usage of the CWM MinIO instance
 available via CWM Object Storage offerings:
 
 ## MinIO Console: Features
 
-### MinIO Console: Buckets
+The MinIO Console (Object Browser) provides a minimal WebUI to:
 
-### MinIO Console: Objects
+- create/remove buckets,
+- upload/download objects; and,
+- share the objects.
+
+This WebUI is pretty intuitive. A typical user can easily explore all its
+options in a matter of minutes and start building solutions on top of it.
 
 ## MinIO Console: How-Tos
 
-### MinIO Console: How to log in
+The following how-tos provide the general insights into the usage of CWM MinIO
+instance Console (Object Browser):
 
-### MinIO Console: How to create a bucket
+### MinIO Console: How to log in via CWM MinIO Instance Credentials
 
-### MinIO Console: How to delete a bucket
+- You need the MinIO instance URL, Access Key, and Secret Key to log in. You can
+  get these from the **INFO** tab of a MinIO instance.
+- Open the URL in a browser.
+- Log in by providing the Access and Secret keys.
 
-### MinIO Console: How to upload an object to a bucket
+Demo:
 
-### MinIO Console: How to download an object from a bucket
-
-### MinIO Console: How to delete an object in a bucket
-
-### MinIO Console: How to share an object
+![MinIO Instance Console](images/console/cwm-object-storage/demo-minio-instance-login.gif)
 
 ---
 
