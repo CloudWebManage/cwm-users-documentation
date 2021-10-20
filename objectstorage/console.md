@@ -23,7 +23,7 @@
 
 ## Overview
 
-The CWM Object Storage Console provides a a simple and easy-to-use WebUI to make
+The CWM Object Storage Console provides a simple and easy-to-use WebUI to make
 use of CWM Object Storage offerings. With the help of this Console, a user can
 easily manage the MinIO instances according to the workload requirements.
 
