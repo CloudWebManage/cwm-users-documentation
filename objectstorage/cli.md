@@ -2,14 +2,10 @@
 
 - [Overview](#overview)
 - [Install](#install)
-  - [macOS](#macos)
-  - [GNU/Linux](#gnulinux)
-  - [Microsoft Windows](#microsoft-windows)
 - [Configure CWM Object Storage Instance](#configure-cwm-object-storage-instance)
 - [Global Options](#global-options)
 - [Commands](#commands)
   - [Command: `alias`](#command-alias)
-  - [Command: `update`](#command-update)
   - [Command: `ls`](#command-ls)
   - [Command: `tree`](#command-tree)
   - [Command: `mb`](#command-mb)
@@ -29,11 +25,10 @@
   - [Command: `mirror`](#command-mirror)
   - [Command: `find`](#command-find)
   - [Command: `diff`](#command-diff)
-    - [Option `--json`](#option---json)
-    - [Diff values in json output](#diff-values-in-json-output)
   - [Command: `policy`](#command-policy)
   - [Command: `tag`](#command-tag)
   - [Command: `stat`](#command-stat)
+  - [Command: `update`](#command-update)
 
 ## Overview
 
@@ -44,40 +39,9 @@ tool, that provides a modern alternative to UNIX commands such as `ls`, `cat`,
 
 ## Install
 
-According to your OS and architecture, download and install the relevant MinIO
-Client.
-
-### macOS
-
-Install `mc` package using [Homebrew](http://brew.sh/):
-
-```shell
-brew install minio/stable/mc
-mc --help
-```
-
-### GNU/Linux
-
-| Architecture |                         URL                          |
-| :----------: | :--------------------------------------------------: |
-| 64-bit Intel |  https://dl.min.io/client/mc/release/linux-amd64/mc  |
-|  64-bit PPC  | https://dl.min.io/client/mc/release/linux-ppc64le/mc |
-
-```shell
-wget https://dl.min.io/client/mc/release/linux-amd64/mc
-chmod +x mc
-./mc --help
-```
-
-### Microsoft Windows
-
-| Architecture |                           URL                            |
-| :----------: | :------------------------------------------------------: |
-| 64-bit Intel | https://dl.min.io/client/mc/release/windows-amd64/mc.exe |
-
-```shell
-mc.exe --help
-```
+Please
+[install](https://github.com/minio/mc/blob/master/docs/minio-client-complete-guide.md#1--download-minio-client)
+the MinIO Client according to your OS and architecture.
 
 ## Configure CWM Object Storage Instance
 
@@ -110,72 +74,13 @@ mc ls cwm-minio
 
 ## Global Options
 
-`mc` supports these optional global flags also:
-
-```shell
-GLOBAL FLAGS:
-  --autocompletion              install auto-completion for your shell
-  --config-dir value, -C value  path to configuration folder (default: "/home/cwm/.mc")
-  --quiet, -q                   disable progress bar display
-  --no-color                    disable color theme
-  --json                        enable JSON lines formatted output
-  --debug                       enable debug output
-  --insecure                    disable SSL certificate verification
-  --help, -h                    show help
-  --version, -v                 print the version
-```
-
-You can set these flags before any subcommand.
-
-Syntax:
-
-```shell
-mc [FLAGS] COMMAND ...
-```
-
-Example:
-
-```shell
-mc --debug ls cwm-minio
-```
+`mc` supports some optional global flags. Please see the official
+[docs](https://github.com/minio/mc/blob/master/docs/minio-client-complete-guide.md#6-global-options)
+for more details.
 
 ## Commands
 
 To list all the supported commands, run `mc --help`.
-
-For CWM Object Storage instances, the following commands are supported:
-
-```text
-alias       set, remove and list aliases in configuration file
-ls          list buckets and objects
-mb          make a bucket
-rb          remove a bucket
-cp          copy objects
-mirror      synchronize object(s) to a remote site
-cat         display object contents
-head        display first 'n' lines of an object
-pipe        stream STDIN to an object
-share       generate URL for temporary access to an object
-find        search for objects
-sql         run sql queries on objects
-stat        show object metadata
-mv          move objects
-tree        list buckets and objects in a tree format
-du          summarize disk usage recursively
-retention   set retention for object(s)
-legalhold   set legal hold for object(s)
-diff        list differences in object name, size, and date between two buckets
-rm          remove objects
-encrypt    manage bucket encryption config
-event       manage object notifications
-watch       listen for object notification events
-undo        undo PUT/DELETE operations
-policy      manage anonymous access to buckets and objects
-tag         manage tags for bucket(s) and object(s)
-ilm         manage bucket lifecycle
-version     manage bucket versioning
-update      update mc to latest release
-```
 
 ### Command: `alias`
 
@@ -213,39 +118,6 @@ List all configured aliases:
 
 ```shell
 mc alias list
-```
-
-### Command: `update`
-
-Check for updates from [https://dl.min.io](https://dl.min.io).
-
-```shell
-$ mc update --help
-Name:
-   mc update - update mc to latest release
-
-USAGE:
-   mc update [FLAGS]
-
-FLAGS:
-  --json      enable JSON lines formatted output
-  --help, -h  show help
-
-EXIT STATUS:
-  0 - you are already running the most recent version
-  1 - new update was applied successfully
- -1 - error in getting update information
-
-EXAMPLES:
-  1. Check and update mc:
-     $ mc update
-```
-
-Example:
-
-```shell
-$ mc update
-You are already running the most recent version of ‘mc’.
 ```
 
 ### Command: `ls`
@@ -515,13 +387,6 @@ Example: Run an aggregation query on an object on MinIO.
 mc sql --query "select count(s.power) from S3Object" cwm-minio/iot-devices/power-ratio.csv
 ```
 
-Example: Run an aggregation query on an encrypted object with customer provided keys.
-
-```shell
-mc sql --encrypt-key "cwm-minio/iot-devices=32byteslongsecretkeymustbegiven1" \
-    --query "select count(s.power) from S3Object" cwm-minio/iot-devices/power-ratio-encrypted.csv
-```
-
 ### Command: `head`
 
 `head` display first `n` lines of an object.
@@ -558,18 +423,6 @@ Example: Display the first line of a text file `test.txt`.
 
 ```shell
 mc head -n 1 cwm-minio/bucket1/test.txt
-```
-
-Example: Display the first line of a server encrypted object `encryptedobject.txt`.
-
-```shell
-mc head -n 1 --encrypt-key "cwm-minio/bucket1=<SECRET_KEY>" cwm-minio/bucket1/encryptedobject.txt
-```
-
-Example: Display the first line of the content of an object, 1 year earlier.
-
-```shell
-mc head -n 1 --rewind 365d cwm-minio/bucket1/test.txt
 ```
 
 ### Command: `pipe`
@@ -674,20 +527,6 @@ storage with specified metadata.
 mc cp --attr Cache-Control=max-age=90000,min-fresh=9000\;key1=value1\;key2=value2 --recursive cwm-minio/bucket1/ s3/bucket1/
 ```
 
-Example: Copy a text file to `cwm-minio/bucket1` and assign storage-class
-`REDUCED_REDUNDANCY` to the uploaded object.
-
-```shell
-mc cp --storage-class REDUCED_REDUNDANCY test.txt cwm-minio/bucket1
-```
-
-Example: Copy a javascript file to object storage and assign `Cache-Control`
-header to the uploaded object.
-
-```sh
-mc cp --attr Cache-Control=no-cache test.js cwm-minio/bucket1
-```
-
 Example: Copy a text file and preserve the filesystem attributes.
 
 ```shell
@@ -750,26 +589,6 @@ Example: Move a text file to an object storage with specified metadata.
 mc mv --attr key1=value1;key2=value2 test.txt cwm-minio/bucket1
 ```
 
-Example: Move a folder recursively from MinIO to Amazon S3 cloud storage with
-specified metadata.
-
-```shell
-mc mv --attr Cache-Control=max-age=90000,min-fresh=9000\;key1=value1\;key2=value2 --recursive cwm-minio/bucket1/folder1 s3/bucket1/
-```
-
-Example: Move a text file to an object storage and assign storage-class
-`REDUCED_REDUNDANCY` to the uploaded object.
-
-```shell
-mc mv --storage-class REDUCED_REDUNDANCY test.txt cwm-minio/bucket1
-```
-
-Example: Move a server-side encrypted file to an object storage.
-
-```shell
-mc mv --recursive --encrypt-key "s3/documents/=<SECRET_KEY_1>, cwm-minio/documents/=<SECRET_KEY_2>" s3/documents/test.txt cwm-minio/documents/
-```
-
 ### Command: `rm`
 
 Use `rm` command to remove file or object.
@@ -815,12 +634,6 @@ Example: Remove a single object.
 mc rm cwm-minio/bucket1/tet.txt
 ```
 
-Example: Remove an encrypted object.
-
-```shell
-mc rm --encrypt-key "cwm-minio/bucket1=<SECRET_KEY>" cwm-minio/bucket1/test.txt
-```
-
 Example: Recursively remove a bucket's contents. Since this is a dangerous
 operation, you must explicitly pass `--force` option.
 
@@ -832,14 +645,6 @@ Example: Remove all uploaded incomplete files for an object.
 
 ```shell
 mc rm --incomplete cwm-minio/bucket1/test.txt
-```
-
-Example: Remove object and output a message only if the object is created older
-than 1 day, 2 hours and 30 minutes. Otherwise, the command stays quiet and
-nothing is printed out.
-
-```shell
-mc rm -r --force --older-than 1d2h30m cwm-minio/bucket1
 ```
 
 ### Command: `share`
@@ -1134,29 +939,9 @@ Example: Compare a local directory and a remote object storage.
 mc diff ./data cwm-minio/bucket1
 ```
 
-#### Option `--json`
-
-JSON option enables parsable output in [JSON lines](http://jsonlines.org/)
-format.
-
-Example: `diff` JSON output.
-
-```shell
-mc diff cmw-minio/bucket1 cwm-minio/bucket2 --json
-```
-
-#### Diff values in json output
-
-|       Constant        | Value |                 Meaning                 |
-| :-------------------: | :---: | :-------------------------------------: |
-|    differInUnknown    |   0   |   Could not perform diff due to error   |
-|     differInNone      |   1   |             Does not differ             |
-|     differInSize      |   2   |             Differs in size             |
-|   differInMetadata    |   3   |           Differs in metadata           |
-|     differInType      |   4   |    Differs in type exfile/directory     |
-|     differInFirst     |   5   |         Only in source (FIRST)          |
-|    differInSecond     |   6   |         Only in target (SECOND)         |
-| differInAASourceMTime |   7   | Differs in active-active source modtime |
+See the official
+[docs](https://github.com/minio/mc/blob/master/docs/minio-client-complete-guide.md#command-diff)
+for more details.
 
 ### Command: `policy`
 
@@ -1215,15 +1000,6 @@ Configure bucket policy for `bucket1` with a policy JSON file.
 
 ```shell
 mc policy set-json ./policy.json cwm-minio/bucket1
-```
-
-Example: Set current anonymous bucket policy to private.
-
-Set anonymous bucket policy for `bucket1/data/2020/` subdirectory to
-`private`. This is equivalent to removing any bucket policies.
-
-```shell
-mc policy set private cwm-minio/bucket1/data/2020/
 ```
 
 ### Command: `tag`
@@ -1316,20 +1092,47 @@ Example: Display information on a bucket.
 mc stat cwm-minio/bucket1
 ```
 
-Example: Display information on an encrypted object.
-
-```shell
-mc stat cwm-minio/bucket1/test.txt --encrypt-key "cwm-minio/bucket1=<SECRET_KEY>"
-```
-
 Example: Display information on objects contained in the bucket.
 
 ```shell
 mc stat -r cwm-minio/bucket1
 ```
 
-Example: Stat a specific object version.
+### Command: `update`
+
+Check for updates from [https://dl.min.io](https://dl.min.io).
 
 ```shell
-mc stat --version-id "<VERSION_ID>" cwm-minio/bucket1/test.txt
+$ mc update --help
+Name:
+   mc update - update mc to latest release
+
+USAGE:
+   mc update [FLAGS]
+
+FLAGS:
+  --json      enable JSON lines formatted output
+  --help, -h  show help
+
+EXIT STATUS:
+  0 - you are already running the most recent version
+  1 - new update was applied successfully
+ -1 - error in getting update information
+
+EXAMPLES:
+  1. Check and update mc:
+     $ mc update
 ```
+
+Example:
+
+```shell
+$ mc update
+You are already running the most recent version of ‘mc’.
+```
+
+---
+
+To get help on a command/subcommand, use the `--help` flag e.g. `mc ls --help`
+or `mc share upload --help`. The help also includes multiple examples for
+different scenarios.
