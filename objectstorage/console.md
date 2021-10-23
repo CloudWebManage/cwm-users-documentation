@@ -94,7 +94,7 @@ the multiple parallel tasks.
 ## Management Console: How-Tos
 
 The following how-tos provide the general insights into the usage of CWM Object
-Storage Console:
+Storage Management Console:
 
 ### Management Console: How to create an instance
 
