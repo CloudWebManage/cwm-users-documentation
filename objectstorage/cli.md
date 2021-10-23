@@ -5,7 +5,7 @@
   - [macOS](#macos)
   - [GNU/Linux](#gnulinux)
   - [Microsoft Windows](#microsoft-windows)
-- [Configure CWM MinIO Instance](#configure-cwm-minio-instance)
+- [Configure CWM Object Storage Instance](#configure-cwm-object-storage-instance)
 - [Global Options](#global-options)
 - [Commands](#commands)
   - [Command: `alias`](#command-alias)
@@ -37,9 +37,10 @@
 
 ## Overview
 
-To access CWM MinIO instance from a CLI, it is recommended to install and use
-the official MinIO Client (`mc`) that provides a modern alternative to UNIX
-commands such as `ls`, `cat`, `cp`, `mirror`, `diff`, `find`, etc.
+To access CWM Object Storage instance from a CLI, it is recommended to install
+and use the official MinIO Client (`mc`), a CWM Object Storage compatible CLI
+tool, that provides a modern alternative to UNIX commands such as `ls`, `cat`,
+`cp`, `mirror`, `diff`, `find`, etc.
 
 ## Install
 
@@ -78,9 +79,9 @@ chmod +x mc
 mc.exe --help
 ```
 
-## Configure CWM MinIO Instance
+## Configure CWM Object Storage Instance
 
-To access your CWM MinIO active instance, you need to first configure your
+To access your CWM Object Storage active instance, you need to first configure your
 instance with the installed MinIO Client (`mc`). You can do so with the `mc`
 subcommand `alias` which requires the API Access URL, Access Key, and the Secret
 Key. You can find this information under the INFO tab of your instance from the
@@ -142,7 +143,7 @@ mc --debug ls cwm-minio
 
 To list all the supported commands, run `mc --help`.
 
-For CWM MinIO instances, the following commands are supported:
+For CWM Object Storage instances, the following commands are supported:
 
 ```text
 alias       set, remove and list aliases in configuration file
