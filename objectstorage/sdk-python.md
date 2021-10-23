@@ -2,7 +2,7 @@
 
 ## Overview
 
-Python can also be used to access the CWM MinIO instances. The Python
+Python can also be used to access the CWM Object Storage instances. The Python
 SDK provides all the APIs to perform operations similar to MinIO Client (`mc`).
 
 For more details on the MinIO Client, please see the [CLI](cli.md)
@@ -17,18 +17,19 @@ The default ports for a CWM MinIO instance are:
 
 ## Endpoint Prefix
 
-The endpoint listed for a CWM MinIO instance i.e. **ACCESS API URL** on the
-WebUI may contain the protocol prefix e.g. `https://`. You do not need the
-prefix with the JavaScript API to connect to the CWM MinIO instance.
+The endpoint listed for a CWM Object Storage instance i.e. **ACCESS API URL** on
+the CWM Object Storage Management Console may contain the protocol prefix e.g.
+`https://`. You do not need the prefix with the JavaScript API to connect to the
+CWM Object Storage instance.
 
 You can consult the
 [API reference](https://docs.min.io/docs/python-client-api-reference.html)
 for the up-to-date information.
 
-## Connect to CWM MinIO Instance
+## Connect to CWM Object Storage Instance
 
 The following snippet creates and establishes an HTTPS connection on port 443
-with a CWM MinIO instance:
+with a CWM Object Storage instance:
 
 ```python
 from minio import Minio
