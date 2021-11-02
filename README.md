@@ -1,6 +1,11 @@
 # cwm-users-documentation
 
-Documentation for end-users of the cwm platform
+The CWM Storage Object is a serverless storage solution based on MinIO. Based on
+serverless architecture, it always provides a new storage instance for the end
+user.
+
+The following sections provides the documentation for the end-users of the CWM
+Object Storage solution:
 
 ## Object Storage
 

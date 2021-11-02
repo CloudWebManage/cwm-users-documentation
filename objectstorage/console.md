@@ -7,8 +7,6 @@
     - [Object Storage: Gateway & Cache](#object-storage-gateway--cache)
     - [Object Storage: Pricing](#object-storage-pricing)
     - [Object Storage: Documentation](#object-storage-documentation)
-  - [Management Console: User Profile](#management-console-user-profile)
-  - [Management Console: Tasks Queue](#management-console-tasks-queue)
 - [Management Console: How-Tos](#management-console-how-tos)
   - [Management Console: How to create an instance](#management-console-how-to-create-an-instance)
   - [Management Console: How to configure an instance](#management-console-how-to-configure-an-instance)
@@ -40,9 +38,6 @@ The left panel of the Management Console provides the supported features:
 Left Panel:
 
 ![Left Panel](images/console/left-panel.png)
-
-The Management Console also provides the **User Profile** and **Tasks Queue**
-features.
 
 ### Management Console: Object Storage
 
@@ -77,19 +72,6 @@ its **Buckets Stores** and **Gateway & Cache** offerings.
 
 The **Documentation** section provides the help on how to configure and use the
 CWM Object Storage.
-
-### Management Console: User Profile
-
-The **User Profile** feature provides the features to reset your password,
-enable/disable multi-factor authentication, configure your preferences, etc. You
-can navigate to your profile by clicking on the User Profile icon ![User Profile
-Icon](images/console/user-profile-icon.png) in the top-right
-corner.
-
-### Management Console: Tasks Queue
-
-The **Tasks Queue** feature of the Management Console helps you keep track of
-the multiple parallel tasks.
 
 ## Management Console: How-Tos
 
