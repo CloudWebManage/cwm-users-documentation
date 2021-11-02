@@ -23,7 +23,7 @@ Storage instances according to their workload requirements.
 
 Management Console:
 
-![Overview](images/console/cwm-object-storage/overview.png)
+![Overview](images/console/overview.png)
 
 ---
 
@@ -39,7 +39,7 @@ The left panel of the Management Console provides the supported features:
 
 Left Panel:
 
-![Left Panel](images/console/cwm-object-storage/left-panel.png)
+![Left Panel](images/console/left-panel.png)
 
 The Management Console also provides the **User Profile** and **Tasks Queue**
 features.
@@ -57,7 +57,7 @@ options are available by clicking on the specific instance.
 
 Example:
 
-![Buckets Stores' Overview](images/console/cwm-object-storage/buckets-stores-overview.png)
+![Buckets Stores' Overview](images/console/buckets-stores-overview.png)
 
 #### Object Storage: Gateway & Cache
 
@@ -83,7 +83,7 @@ CWM Object Storage.
 The **User Profile** feature provides the features to reset your password,
 enable/disable multi-factor authentication, configure your preferences, etc. You
 can navigate to your profile by clicking on the User Profile icon ![User Profile
-Icon](images/console/cwm-object-storage/user-profile-icon.png) in the top-right
+Icon](images/console/user-profile-icon.png) in the top-right
 corner.
 
 ### Management Console: Tasks Queue
@@ -109,12 +109,12 @@ Storage Management Console:
 
 Demo:
 
-![Create Instance Demo](images/console/cwm-object-storage/demo-create-instance.gif)
+![Create Instance Demo](images/console/demo-create-instance.gif)
 
 ### Management Console: How to configure an instance
 
 - Click on the **Open** button
-  ![Open](images/console/cwm-object-storage/btn-open.png) of the instance that
+  ![Open](images/console/btn-open.png) of the instance that
   you want to configure.
 - A new panel will appear on the right side showing all the properties and
   configurations of the selected instance. The right expanded panel will include
@@ -127,16 +127,16 @@ Demo:
   - LOGS
 
 - The expanded right panel of an instance can be closed by clicking on the
-  **Close** button ![Close](images/console/cwm-object-storage/btn-close.png).
+  **Close** button ![Close](images/console/btn-close.png).
 
 Demo:
 
-![Configure Instance](images/console/cwm-object-storage/demo-configure-instance.gif)
+![Configure Instance](images/console/demo-configure-instance.gif)
 
 ### Management Console: How to delete an instance
 
 - Click on the **Actions** button
-  ![Actions](images/console/cwm-object-storage/btn-actions.png) on the instance
+  ![Actions](images/console/btn-actions.png) on the instance
   you want to delete.
 - From the drop-down menu, select the **Terminate** menu option. A confirmation
   dialog box will appear.
@@ -145,7 +145,7 @@ Demo:
 
 Demo:
 
-![Delete Instance Demo](images/console/cwm-object-storage/demo-delete-instance.gif)
+![Delete Instance Demo](images/console/demo-delete-instance.gif)
 
 ---
 
