@@ -1,5 +1,14 @@
 # Object Storage Management Console
 
+<!--
+  To update the TOC:
+  * install nodejs (https://nodejs.org/en/)
+  * run the following command:
+    * npx doctoc@2.0.1 --github --notitle objectstorage/console.md
+-->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 - [Overview](#overview)
 - [Management Console: Features](#management-console-features)
   - [Management Console: Object Storage](#management-console-object-storage)
@@ -7,10 +16,8 @@
     - [Object Storage: Gateway & Cache](#object-storage-gateway--cache)
     - [Object Storage: Pricing](#object-storage-pricing)
     - [Object Storage: Documentation](#object-storage-documentation)
-- [Management Console: How-Tos](#management-console-how-tos)
-  - [Management Console: How to create an instance](#management-console-how-to-create-an-instance)
-  - [Management Console: How to configure an instance](#management-console-how-to-configure-an-instance)
-  - [Management Console: How to delete an instance](#management-console-how-to-delete-an-instance)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Overview
 
@@ -72,62 +79,6 @@ its **Buckets Stores** and **Gateway & Cache** offerings.
 
 The **Documentation** section provides the help on how to configure and use the
 CWM Object Storage.
-
-## Management Console: How-Tos
-
-The following how-tos provide the general insights into the usage of CWM Object
-Storage Management Console:
-
-### Management Console: How to create an instance
-
-- Make sure that you're logged in.
-- From the left panel, select **Object Storage** > **Buckets Stores**.
-- From the right side, click on **Add Instance** button. A dialog box will
-  appear.
-- Select **Zone** from the drop-down list.
-- Type in the **Instance Name**.
-- Click on the **Add Instance** button.
-- The new instance will appear on the right side.
-
-Demo:
-
-![Create Instance Demo](images/console/demo-create-instance.gif)
-
-### Management Console: How to configure an instance
-
-- Click on the **Open** button
-  ![Open](images/console/btn-open.png) of the instance that
-  you want to configure.
-- A new panel will appear on the right side showing all the properties and
-  configurations of the selected instance. The right expanded panel will include
-  the following tabs/sub-menus:
-
-  - INFO
-  - CONFIGURE
-  - CACHE
-  - REPORTS
-  - LOGS
-
-- The expanded right panel of an instance can be closed by clicking on the
-  **Close** button ![Close](images/console/btn-close.png).
-
-Demo:
-
-![Configure Instance](images/console/demo-configure-instance.gif)
-
-### Management Console: How to delete an instance
-
-- Click on the **Actions** button
-  ![Actions](images/console/btn-actions.png) on the instance
-  you want to delete.
-- From the drop-down menu, select the **Terminate** menu option. A confirmation
-  dialog box will appear.
-- Check on the **Check to allow Termination** checkbox.
-- Click on the **Terminate Instance** button.
-
-Demo:
-
-![Delete Instance Demo](images/console/demo-delete-instance.gif)
 
 ---
 

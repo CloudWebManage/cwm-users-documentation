@@ -10,6 +10,7 @@ is kept securely regardless of the status of the Minio server, or usage.
 The following sections provides the documentation for the end-users of the CWM
 Object Storage solution:
 
+- [How To Guides](objectstorage/howto.md)
 - [Console](objectstorage/console.md)
 - [CLI](objectstorage/cli.md)
 - SDKs:
