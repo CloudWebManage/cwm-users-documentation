@@ -12,9 +12,10 @@
 - [Create an instance](#create-an-instance)
 - [Configure an instance](#configure-an-instance)
 - [Delete an instance](#delete-an-instance)
+- [Create an AWS S3 Gateway Instance](#create-an-aws-s3-gateway-instance)
+  - [Test Connectivity of AWS S3 Gateway Instance](#test-connectivity-of-aws-s3-gateway-instance)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 
 ## Create an instance
 
@@ -66,3 +67,28 @@ Demo:
 Demo:
 
 ![Delete Instance Demo](images/console/demo-delete-instance.gif)
+
+## Create an AWS S3 Gateway Instance
+
+- From the left panel, click on **Gateway & Cache**.
+- Click on **Add Instance** button from the right. Its dialog box will appear.
+- Select **AWS S3** from the **Provider** drop-down list.
+- Type in the **Instance Name**.
+- Get your AWS S3 Access and Secret keys and fill in their respective fields.
+  Click on **Add Instance** button of the dialog box and an instance will be
+  added.
+
+Demo:
+
+![AWS S3: Create Gateway Instance](images/console/demo-aws-s3-create-gateway-instance.gif)
+
+### Test Connectivity of AWS S3 Gateway Instance
+
+- Click on the **Open** button ![Open](images/console/btn-open.png) of the
+  instance that you want to test.
+- From the properties panel, select **CONFIGURE**.
+- Click on **Test Connectivity** button.
+- The message **"Connected successfully."** will appear in case of a successful
+  connection.
+
+![AWS S3: Test Connectivity](images/console/demo-aws-s3-gateway-test-connectivity.gif)
